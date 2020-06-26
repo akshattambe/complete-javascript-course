@@ -10,14 +10,15 @@ GAME RULES:
 */
 
 
-var scores, roundScores, activePlayer, dice;
+var scores, roundScores, activePlayer, winningNumber;
 
-scores = [0, 0];
-roundScores = 0;
-activePlayer = 0;
 winningNumber = 20;
 
 function init() {
+    roundScores = 0;
+    activePlayer = 0;
+    scores = [0, 0];
+
     // Reset Initial values to 0
     document.getElementById('score-0').textContent = '0';
     document.getElementById('current-0').textContent = '0';
@@ -25,17 +26,19 @@ function init() {
     document.getElementById('score-1').textContent = '0';
     document.getElementById('current-1').textContent = '0';
 
-// Reset Dice to none i.e. do not show dice in the beginning.
+    // Reset Dice to none i.e. do not show dice in the beginning.
     document.querySelector('.dice').style.display = 'none';
-    if(document.querySelector('#name-' + activePlayer).textContent === 'Winner!'){
-        document.querySelector('.player-'+activePlayer+'-panel').classList.remove('winner');
-    }
-    roundScores = 0;
-    activePlayer = 0;
-    scores = [0, 0];
-    document.querySelector('.player-0-panel').classList.add('active');
-    document.querySelector('.player-1-panel').classList.remove('active');
 
+    // NO Winner
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+
+    // Active player
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.add('active');
+
+    // Player details
     document.getElementById('name-0').textContent = 'Player 1';
     document.getElementById('name-1').textContent = 'Player 2';
 }
@@ -44,7 +47,7 @@ function resetRounderScoreAndActivePlayer() {
     roundScores = 0;
     document.querySelector('#current-' + activePlayer).textContent = roundScores;
 
-    // 3. Change the active user.
+    // Change the active user.
     document.querySelector('.player-'+ activePlayer +'-panel').classList.toggle('active');
     (activePlayer === 0) ? activePlayer = 1 : activePlayer = 0;
     document.querySelector('.player-'+ activePlayer +'-panel').classList.toggle('active');
@@ -75,7 +78,7 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         document.querySelector('#current-' + activePlayer).textContent = roundScores;
     }
 
-    //Reset to beginning when winner is declared.
+    // 4. Reset to beginning when winner is declared.
     if(scores[activePlayer] >= winningNumber){
         init();
     }
@@ -87,7 +90,7 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
     if(document.querySelector('#name-' + activePlayer).textContent === 'Winner!'){
         init();
     }else{
-        // 1. Added rounded score to Scores array w.r.t activePlayer.
+        // Added rounded score to Scores array w.r.t activePlayer.
         scores[activePlayer] += roundScores;
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
@@ -97,11 +100,8 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
         }else{
-            // 2. Reset rounded score to 0.
+            // Reset rounded score to 0.
             resetRounderScoreAndActivePlayer();
         }
     }
 })
-
-
-
