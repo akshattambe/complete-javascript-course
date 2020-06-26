@@ -15,8 +15,9 @@ var scores, roundScores, activePlayer, dice;
 scores = [0, 0];
 roundScores = 0;
 activePlayer = 0;
+winningNumber = 20;
 
-function resetGameOnPageLoad() {
+function init() {
     // Reset Initial values to 0
     document.getElementById('score-0').textContent = '0';
     document.getElementById('current-0').textContent = '0';
@@ -26,11 +27,17 @@ function resetGameOnPageLoad() {
 
 // Reset Dice to none i.e. do not show dice in the beginning.
     document.querySelector('.dice').style.display = 'none';
+    if(document.querySelector('#name-' + activePlayer).textContent === 'Winner!'){
+        document.querySelector('.player-'+activePlayer+'-panel').classList.remove('winner');
+    }
     roundScores = 0;
     activePlayer = 0;
     scores = [0, 0];
     document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
+
+    document.getElementById('name-0').textContent = 'Player 1';
+    document.getElementById('name-1').textContent = 'Player 2';
 }
 
 function resetRounderScoreAndActivePlayer() {
@@ -44,11 +51,10 @@ function resetRounderScoreAndActivePlayer() {
 }
 
 // Reset game on Page load.
-resetGameOnPageLoad();
-
+init();
 
 // Add Event listener for 'New Game' button. Reset values on click.
-document.querySelector('.btn-new').addEventListener('click', resetGameOnPageLoad);
+document.querySelector('.btn-new').addEventListener('click', init);
 
 // Add event listener for 'Roll Dice' button.
 document.querySelector('.btn-roll').addEventListener('click', function () {
@@ -68,20 +74,32 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         roundScores += dice;
         document.querySelector('#current-' + activePlayer).textContent = roundScores;
     }
+
+    //Reset to beginning when winner is declared.
+    if(scores[activePlayer] >= winningNumber){
+        init();
+    }
+
 });
 
 // Add event Listener for 'Hold' button
 document.querySelector('.btn-hold').addEventListener('click', function () {
-    // 1. Added rounded score to Scores array w.r.t activePlayer.
-   scores[activePlayer] += roundScores;
-    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+    if(document.querySelector('#name-' + activePlayer).textContent === 'Winner!'){
+        init();
+    }else{
+        // 1. Added rounded score to Scores array w.r.t activePlayer.
+        scores[activePlayer] += roundScores;
+        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
-    // 2. Reset rounded score to 0.
-    resetRounderScoreAndActivePlayer();
-
-    // Calculate for first one to reach 100 points.
-    if(scores[activePlayer] >= 100){
-
+        // Calculate for first one to reach 100 points.
+        if(scores[activePlayer] >= winningNumber){
+            document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        }else{
+            // 2. Reset rounded score to 0.
+            resetRounderScoreAndActivePlayer();
+        }
     }
 })
 
