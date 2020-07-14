@@ -7,16 +7,22 @@ var john = {
     job: 'teacher'
 };
 
+
 var Person = function(name, yearOfBirth, job) {
     this.name = name;
     this.yearOfBirth = yearOfBirth;
     this.job = job;
 }
 
+//Modifying Persons Obj by adding a FUNCTION to it using PROTOTYPE
+//calculateAge() is not part of the Constructor here.
+
 Person.prototype.calculateAge  = function() {
     console.log(2016 - this.yearOfBirth);
 };
 
+//Modifying Persons Obj by adding a VARIABLE to it using PROTOTYPE
+//This is not a common this unlike adding method we added above example.
 Person.prototype.lastName = 'Smith';
 
 var john = new Person('John', 1990, 'teacher');
