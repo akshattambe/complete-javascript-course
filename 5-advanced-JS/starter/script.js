@@ -71,18 +71,22 @@ console.log(ved.lastNameOutsideConstructor);
 /////////////////////////////
 // LECTURE: Object.create
 
-//Object.create() method for creating objects in JS
+// Object.create(prototype) method for creating objects in JS
 
-//Object.create() method creates a new object, using an existing object as the prototype of the newly created object.
+// Object.create(prototype) method creates a new object, using an "existing object" as the prototype of the newly created object.
+// The Object.create(prototype) creates an instance of an object with the prototype passed has first parameter.
+// If a second parameter is provided, it will be used for this object only. This second parameter must be of type DefinedProperty.
 
-
+/*
 var personPro = {
     lastName : 'Tambe',
+    isAdult : false,
     calculateAge: function () {
-        console.log(this.name + ' ' + this.lastName + ' is ' + (2020 - this.yearOfBirth) + ' years old.');
+        console.log(this.name + ' ' + this.lastName + ' is ' + (2020 - this.yearOfBirth) + ' years old.\nAre you an Adult ?\n' + this.isAdult);
     }
 }
 
+// "name" is a property set on "akshat", but not on "personPro"
 var akshat = Object.create(personPro,
     {
         name: {value: 'Akshat Kumar'},
@@ -103,11 +107,39 @@ var ved = Object.create(personPro,
         yearOfBirth: {value: 2016},
         jon: {value: 'Kiddo *_*'}
     });
+var tryme = Object.create(null);
+tryme.name = 'trial';
+tryme.isAdult = true;
+tryme.calculateAge();
 
+// inherited properties like 'isAdult' can be overwritten
+akshat.isAdult = true;
+akshat.isAdult = true;
 akshat.calculateAge();
 renuka.calculateAge();
 ved.calculateAge();
+*/
 
+//The major difference between Function constructor and Object.create(prototype) is that -
+// ** 1 **
+// Object.Create returns the new object while
+// the Function constructor returns the constructor of the object or the object.
+
+// ** 2 **
+// When you create a constructor, the definition of that constructor and all its parts
+// (constructor body and prototype definitions) determine the initialization and API of the object created.
+// This takes away that responsibility from the caller. The creator can provide some input through
+// constructor arguments, but everything else is left to the definition defined beforehand.
+
+//When you use Object.create, it's at the time you create the object that you have to provide everything.
+// This includes any properties you want on that object as well as any object it might inherit from.
+
+// ** 3 **
+//When used with "new" keyword, FC automatically create objects that inherit from
+// the prototype object attached to the constructor function.
+
+//But with Object.create, the inheritance object had to be explicitly specified as first argument,
+// and in this case created when the new object was created.
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
